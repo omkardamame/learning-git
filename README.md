@@ -9,12 +9,12 @@ Each item requires **reading + hands-on practice** before being marked complete.
 
 ### 📖 Chapter 1 – Getting Started
 
-- [ ] What version control is and why it matters
-- [ ] Centralized vs Distributed VCS
-- [ ] Short history of Git
-- [ ] Why Git’s design is different (snapshots, not diffs)
-- [ ] Installing Git
-- [ ] Basic configuration (`user.name`, `user.email`, editor)
+- [x] What version control is and why it matters
+- [x] Centralized vs Distributed VCS
+- [x] Short history of Git
+- [x] Why Git’s design is different (snapshots, not diffs)
+- [x] Installing Git
+- [x] Basic configuration (`user.name`, `user.email`, editor)
 
 🎯 **Outcome:** Understand *why* Git exists and what problems it solves.
 
