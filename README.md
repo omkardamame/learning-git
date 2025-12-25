@@ -22,7 +22,7 @@ Each item requires **reading + hands-on practice** before being marked complete.
 
 ### 📖 Chapter 2 – Git Basics (CRITICAL)
 
-- [ ] Initializing a repository (`git init`)
+- [-] Initializing a repository (`git init`)
 - [ ] File lifecycle (untracked → staged → committed)
 - [ ] `git status` and `git diff`
 - [ ] Staging files (`git add`)
