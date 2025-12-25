@@ -145,7 +145,7 @@ git add -h
 
 as in:
 
-```bash
+```console
 git add -h
 usage: git add [<options>] [--] <pathspec>...
 
