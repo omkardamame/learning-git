@@ -37,7 +37,7 @@ Each topic includes **explicit Git commands** to aid future revision.
   - ✅ Unstage files: `git restore --staged`
   - ✅ Reset commits: `git reset`
   - ✅ Revert commits: `git revert`
-- [ ] Working with remotes  
+- ✅ Working with remotes  
   (`git remote`, `git fetch`, `git pull`, `git push`)
 - [ ] Tagging  
   (`git tag`, `git tag -a`)

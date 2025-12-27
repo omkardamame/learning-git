@@ -371,3 +371,224 @@ git log -S function_name
 ```bash
 git log -- path/to/file
 ```
+
+# 2.4 [Undoing Things](https://git-scm.com/book/en/v2/Git-Basics-Undoing-Things)
+
+At any stage of development, you may need to **undo a change**, though you must be careful as some operations can result in the **permanent loss of work**. Committed snapshots are generally very difficult to lose, but changes that have never been committed may be gone forever once undone.
+
+- **Amending the Last Commit**
+
+If you commit too early, forget to add a file, or make a typo in your commit message, you can use the **--amend** **option**.
+
+• **Command:** `$ git commit --amend`
+
+```bash
+git commit -m 'Initial commit'
+git add forgotten_file
+git commit --amend -m "git tFixed commit"
+```
+
+• This command takes your current staging area and uses it for the commit, **replacing the previous commit entirely**.
+
+• **Warning:** You should **only amend commits that are still local** and have not been pushed to a shared repository, as rewriting pushed history causes major problems for collaborators.
+
+- **Unstaging a Staged File**
+
+If you accidentally stage a file (using `git add *`, for example) and want to move it back to being just a modified file, you can use the following commands depending on your Git version:
+
+• **For versions 2.23.0+:** Use **$ git restore --staged filename**.
+
+```bash
+omkar@black-box:~/study$ git add *
+omkar@black-box:~/study$ git status
+On branch main
+Your branch is up to date with 'study/main'.
+
+Changes to be committed:
+  (use "git restore --staged <file>..." to unstage)
+	new file:   test1
+	new file:   test2
+
+omkar@black-box:~/study$ git restore --staged test2
+omkar@black-box:~/study$ git status
+On branch main
+Your branch is up to date with 'study/main'.
+
+Changes to be committed:
+  (use "git restore --staged <file>..." to unstage)
+	new file:   test1
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+	test2
+```
+
+• **For older versions:** Use **$ git reset HEAD filename**. These commands change your index to match the last commit but **do not touch the changes in your working directory**.
+
+```bash
+omkar@black-box:~/study$ git add *
+omkar@black-box:~/study$ git status
+On branch main
+Your branch is up to date with 'study/main'.
+
+Changes to be committed:
+  (use "git restore --staged <file>..." to unstage)
+	new file:   test1
+	new file:   test2
+
+omkar@black-box:~/study$ git reset HEAD test2
+omkar@black-box:~/study$ git status
+On branch main
+Your branch is up to date with 'study/main'.
+
+Changes to be committed:
+  (use "git restore --staged <file>..." to unstage)
+	new file:   test1
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+	test2
+```
+
+- **Unmodifying a Modified File**
+
+If you realize you do not want to keep changes made to a file and want to **revert it to exactly how it looked in the last commit**, you have two options:
+
+• **For versions 2.23.0+:** Use `git restore filename`.
+
+• **For older versions:** Use `git checkout -- filename`.
+
+• **Warning:** Both of these are **dangerous commands**. Git replaces your local file with the last committed version, and **any unsaved local changes are permanently deleted**.
+
+**Reverting Commits**
+
+For cases where you need to undo a change that has already been recorded in history, the **git revert** command can be used. Unlike reset, which moves pointers, a revert creates a **new commit** that applies the **exact opposite changes** of the commit you are targeting.
+
+Simple example
+
+1. You have these commits:
+
+```bash
+Commit 3 – Added footer 
+Commit 2 – Added header 
+Commit 1 – Initial project files
+```
+
+2. You realize “Added header” (Commit 2) was a mistake.
+3. Run:
+
+```bash
+git revert <hash-of-commit-2>
+```
+
+4. Git automatically creates a new commit:
+
+```bash
+Commit 4 – Revert "Added header" 
+Commit 3 – Added footer 
+Commit 2 – Added header 
+Commit 1 – Initial project files
+```
+
+The “header” changes are undone, but the original history remains.
+
+## One-line example (revert last commit)
+
+```bash
+git revert HEAD
+```
+
+That is the simplest and most common use.
+
+# 2.5 [Working with Remotes](https://git-scm.com/book/en/v2/Git-Basics-Working-with-Remotes)
+
+**Remote repositories** are versions of your project hosted on the Internet, a network, or even elsewhere on your **local machine**. Collaborating with others requires managing these remotes by pushing and pulling data to share work.
+
+**Showing Your Remotes**
+
+To see which remote servers you have configured, run the **git remote** command, which lists the shortnames of your remote handles. If you have cloned a repository, you will likely see **origin**, the default name Git gives to the server you cloned from. Using **git remote -v** provides a more detailed view, showing the specific URLs stored for each shortname used for fetching and pushing.
+
+```bash
+omkar@black-box:~/study$ git remote -v
+origin	https://github.com/omkardamame/learning-git.git (fetch)
+origin	https://github.com/omkardamame/learning-git.git (push)
+```
+
+**Adding Remote Repositories**
+
+While `git clone` adds the `origin` remote automatically, you can add new remotes explicitly using the command **git remote add shortname url**. Once added, you can use the shortname (such as `study`) on the command line as a convenient alias for the full URL.
+
+```bash
+git remote add study https://github.com/omkardamame/learning-git.git
+```
+
+```bash
+omkar@black-box:~/study$ git remote -v
+origin	https://github.com/omkardamame/learning-git.git (fetch)
+origin	https://github.com/omkardamame/learning-git.git (push)
+study	https://github.com/omkardamame/learning-git.git (fetch)
+study	https://github.com/omkardamame/learning-git.git (push)
+```
+
+**Fetching and Pulling from Remotes**
+
+To get data from a remote project without automatically merging it into your current work, use `git fetch <remote>`. This command downloads all the data from that remote that you do not yet have, providing references to all its branches for inspection or manual merging.
+
+```console
+omkar@black-box:~/study$ git fetch origin 
+From https://github.com/omkardamame/learning-git
+ + 13b2f64...59c4a26 main       -> origin/main  (forced update)
+```
+
+Alternatively, if your local branch is set up to **track** a remote branch, you can use **git pull**. This command automatically fetches the data and then attempts to **merge** that remote branch into your current local branch. Starting with Git version 2.27, `git pull` will issue a warning if the `pull.rebase` variable is not explicitly configured to either "true" or "false".
+
+**Pushing to Your Remotes**
+
+When you are ready to share a specific branch upstream, use `git push <remote> <branch>` (e.g., `git push origin master`). This operation only succeeds if you have **write access** to the server and if no one else has pushed changes in the meantime. If the remote has been updated since your last fetch, Git will reject your push, and you must incorporate the new work into yours before being allowed to push again.
+
+**Inspecting, Renaming, and Removing Remotes**
+
+• **Inspecting:** Use `git remote show REMOTE_NAME` to see detailed information, including the fetch and push URLs, the HEAD branch, and which local branches are configured for automatic pulling and pushing.
+
+```console
+omkar@black-box:~/study$ git remote show origin
+* remote origin
+  Fetch URL: https://github.com/omkardamame/learning-git.git
+  Push  URL: https://github.com/omkardamame/learning-git.git
+  HEAD branch: main
+  Remote branch:
+    main tracked
+  Local ref configured for 'git push':
+    main pushes to main (up to date)
+```
+
+• **Renaming:** Use `git remote rename <old_name> <new_name>` to change a remote's shortname; this also updates all associated remote-tracking branch names.
+
+```console
+omkar@black-box:~/study$ git remote -v
+origin	https://github.com/omkardamame/learning-git.git (fetch)
+origin	https://github.com/omkardamame/learning-git.git (push)
+study	https://github.com/omkardamame/learning-git.git (fetch)
+study	https://github.com/omkardamame/learning-git.git (push)
+omkar@black-box:~/study$ git remote rename study study2
+omkar@black-box:~/study$ git remote -v
+origin	https://github.com/omkardamame/learning-git.git (fetch)
+origin	https://github.com/omkardamame/learning-git.git (push)
+study2	https://github.com/omkardamame/learning-git.git (fetch)
+study2	https://github.com/omkardamame/learning-git.git (push)
+```
+
+• **Removing:** If a contributor is no longer active or a server has moved, use `git remote remove` or `git remote rm` to delete the remote and its associated configuration and tracking branches.
+
+```console
+omkar@black-box:~/study$ git remote -v
+origin	https://github.com/omkardamame/learning-git.git (fetch)
+origin	https://github.com/omkardamame/learning-git.git (push)
+study2	https://github.com/omkardamame/learning-git.git (fetch)
+study2	https://github.com/omkardamame/learning-git.git (push)
+omkar@black-box:~/study$ git remote remove study2
+omkar@black-box:~/study$ git remote -v
+origin	https://github.com/omkardamame/learning-git.git (fetch)
+origin	https://github.com/omkardamame/learning-git.git (push)
+```
+
