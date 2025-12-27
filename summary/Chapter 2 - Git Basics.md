@@ -176,3 +176,198 @@ If you didn't use `git mv`, you would have to do this:
 The `git mv` Way (1 step):
 
 `git mv old_name.txt new_name.txt` performs all three steps above instantly. Because the content is the same, Git is smart enough to show this in your `git status` as `renamed: old_name.txt -> new_name.txt`.
+
+# 2.3 [Viewing the Commit History](https://git-scm.com/book/en/v2/Git-Basics-Viewing-the-Commit-History)
+
+The most basic and powerful tool for reviewing a repository's history is the **git log** **command**. By default, this command lists commits in **reverse chronological order**, showing the SHA-1 checksum, the author’s name and email, the date, and the commit message
+
+**Formatting and Visualization Options**
+
+You can customize the amount of detail displayed using several formatting flags:
+
+• **-p** **or** **--patch**: Displays the **specific differences (the patch)** introduced in each commit. You can also limit the number of log entries displayed, such as using `-1` or `-2` to show only the last one or two entries.
+
+```console
+omkar@black-box:~/study$ git log -p -1
+commit 967675effe0d2fc6d142eb9d95e4b6038dc9e50d (HEAD -> main, study/main)
+Author: Omkar Damame <omkardamame.work@gmail.com>
+Date:   Thu Dec 25 17:47:22 2025 +0530
+
+    Updated README.md to latest progress
+
+diff --git a/README.md b/README.md
+index 8678d0a..61c29d9 100644
+--- a/README.md
++++ b/README.md
+@@ -23,7 +23,7 @@ Each item requires **reading + hands-on practice** before being marked complete.
+ ### 📖 Chapter 2 – Git Basics (CRITICAL)
+ 
+ - ✅ Initializing a repository (`git init`)
+-- [ ] File lifecycle (untracked → staged → committed)
++- ✅ File lifecycle (untracked → staged → committed)
+ - [ ] `git status` and `git diff`
+ - [ ] Staging files (`git add`)
+ - [ ] Committing correctly (`git commit`)
+```
+
+• **--stat**: Provides abbreviated statistics for each commit, listing **which files were modified** and how many lines were added or removed.
+
+```console
+omkar@black-box:~/study$ git log --stat
+commit 967675effe0d2fc6d142eb9d95e4b6038dc9e50d (HEAD -> main, study/main)
+Author: Omkar Damame <omkardamame.work@gmail.com>
+Date:   Thu Dec 25 17:47:22 2025 +0530
+
+    Updated README.md to latest progress
+
+ README.md | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+commit f6fbd6daa87bf4f7d090a02c3d761350f5e0941c
+Author: Omkar Damame <omkardamame.work@gmail.com>
+Date:   Thu Dec 25 17:46:03 2025 +0530
+
+    Completed File lifecycle from Chapter 2
+
+ summary/Chapter 2 - Git Basics.md | 116 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 115 insertions(+), 1 deletion(-)
+```
+
+• **--pretty**: Changes the output to prebuilt formats like `oneline` (one commit per line), `short`, `full`, or `fuller`.
+
+```console
+omkar@black-box:~/study$ git log --pretty=oneline
+967675effe0d2fc6d142eb9d95e4b6038dc9e50d (HEAD -> main, study/main) Updated README.md to latest progress
+f6fbd6daa87bf4f7d090a02c3d761350f5e0941c Completed File lifecycle from Chapter 2
+d071d42dbfa4c1e1ddb6330623bc364b860d4d23 Added summary of Chapter 2: Getting a Git Repository
+dfbeaecc46c0abb64a584b73590ad55a5f3a0ace Made a minor change in Chapter 1
+96936be15348b085c240f115eb5bc51065e94679 Added summary for Chapter 1: Getting Started
+aa8ff53be0c2ce10af8d005b1127e194635af004 Added emoji instead of generic tick-box for completion
+9c8fde78a2d55308ca582322ce4c57f642e03c1b Started Chapter 2
+5120a02a93add6a2cad5591e66733d27f78f3461 Completed Chapter 1
+ea57ef858125ad74817aeba9fc7f919d56d32c25 chore: Added Pro Git Book link to CONTRIBUTING.md
+ee2c85973d11935138b2fdfa91a8bce83b5d81c5 Changed content of CONTRIBUTING.md
+92a72ab2e66250a5b3fd3f3f54c427a4efcd0c19 Changed few things
+02ccf8d6e5cdad98e3d3b3b9dc5b7aa2fcbd1106 Initial commit for studying
+```
+
+```console
+omkar@black-box:~/study$ git log --pretty=short
+commit 967675effe0d2fc6d142eb9d95e4b6038dc9e50d (HEAD -> main, study/main)
+Author: Omkar Damame <omkardamame.work@gmail.com>
+
+    Updated README.md to latest progress
+
+commit f6fbd6daa87bf4f7d090a02c3d761350f5e0941c
+Author: Omkar Damame <omkardamame.work@gmail.com>
+
+    Completed File lifecycle from Chapter 2
+
+commit d071d42dbfa4c1e1ddb6330623bc364b860d4d23
+Author: Omkar Damame <omkardamame.work@gmail.com>
+
+    Added summary of Chapter 2: Getting a Git Repository
+```
+
+• **format**: Allows for highly customized layouts using specifiers, such as `%h` for the abbreviated hash, `%an` for the author name, `%ar` for the relative date, and `%s` for the subject.
+
+```console
+omkar@black-box:~/study$ git log --pretty=format:"%h - %an, %ar : %s"
+967675e - Omkar Damame, 2 days ago : Updated README.md to latest progress
+f6fbd6d - Omkar Damame, 2 days ago : Completed File lifecycle from Chapter 2
+d071d42 - Omkar Damame, 2 days ago : Added summary of Chapter 2: Getting a Git Repository
+```
+
+Table 1. Useful specifiers for `git log --pretty=format`
+
+| Specifier | Description of Output                            |
+| --------- | ------------------------------------------------ |
+| %H        | Commit hash                                      |
+| %h        | Abbreviated commit hash                          |
+| %T        | Tree hash                                        |
+| %t        | Abbreviated tree hash                            |
+| %P        | Parent hashes                                    |
+| %p        | Abbreviated parent hashes                        |
+| %an       | Author name                                      |
+| %ae       | Author email                                     |
+| %ad       | Author date (format respects the --date= option) |
+| %ar       | Author date, relative                            |
+| %cn       | Committer name                                   |
+| %ce       | Committer email                                  |
+| %cd       | Committer date                                   |
+| %cr       | Committer date, relative                         |
+| %s        | Subject                                          |
+
+Note: You may be wondering what the difference is between _author_ and _committer_. The author is the person who originally wrote the work, whereas the committer is the person who last applied the work. So, if you send in a patch to a project and one of the core members applies the patch, **both of you get credit** — you as the author, and the core member as the committer.
+
+• **--graph**: Adds a visual **ASCII graph** showing branch and merge history alongside the commit data.
+
+```console
+omkar@black-box:~/study$ git log --pretty=format:"%h %s" --graph
+* 967675e Updated README.md to latest progress
+* f6fbd6d Completed File lifecycle from Chapter 2
+* d071d42 Added summary of Chapter 2: Getting a Git Repository
+```
+
+Table 2. Common options to `git log`
+
+| Option          | Description                                                                                               |
+| --------------- | --------------------------------------------------------------------------------------------------------- |
+| -p              | Show the patch introduced with each commit.                                                               |
+| --stat          | Show statistics for files modified in each commit.                                                        |
+| --shortstat     | Display only the changed/insertions/deletions line from the --stat command.                               |
+| --name-only     | Show the list of files modified after the commit information.                                             |
+| --name-status   | Show the list of files affected with added/modified/deleted information as well.                          |
+| --abbrev-commit | Show only the first few characters of the SHA-1 checksum instead of all 40.                               |
+| --relative-date | Display the date in a relative format (for example, “2 weeks ago”) instead of using the full date format. |
+| --graph         | Display an ASCII graph of the branch and merge history beside the log output.                             |
+| --pretty        | Show commits in an alternate format. Option values include oneline, short, full, fuller, and format.      |
+| --oneline       | Shorthand for --pretty=oneline --abbrev-commit used together.                                             |
+
+**Limiting History and Filtering**
+
+To find specific information in large projects, you can limit the output:
+
+• -n: Shows only the last _n_ commits (e.g., `2`).
+
+```console
+omkar@black-box:~/study$ git log -n 2
+commit 967675effe0d2fc6d142eb9d95e4b6038dc9e50d (HEAD -> main, study/main)
+Author: Omkar Damame <omkardamame.work@gmail.com>
+Date:   Thu Dec 25 17:47:22 2025 +0530
+
+    Updated README.md to latest progress
+
+commit f6fbd6daa87bf4f7d090a02c3d761350f5e0941c
+Author: Omkar Damame <omkardamame.work@gmail.com>
+Date:   Thu Dec 25 17:46:03 2025 +0530
+
+    Completed File lifecycle from Chapter 2
+```
+
+• **Time-limiting**: Options like **--since** **and** **--until** allow you to filter by relative time (e.g., "2.weeks") or specific dates (e.g., "2008-01-15").
+
+```bash
+git log --since=2.weeks
+```
+
+• **Metadata Filtering**: Use **--author** to find commits by a specific person or **--grep** to search commit messages for keywords.
+
+```bash
+omkar@black-box:~/study$ git log --pretty="%h - %s" --author='Omkar' 
+967675e - Updated README.md to latest progress
+f6fbd6d - Completed File lifecycle from Chapter 2
+d071d42 - Added summary of Chapter 2: Getting a Git Repository
+```
+
+• **-S** **(The "Pickaxe")**: Searches for commits that changed the number of occurrences of a **specific string** in the code.
+
+```bash
+git log -S function_name
+```
+
+• **Path Filtering**: Adding a path after double dashes (e.g., `-- path/to/file`) limits the log to commits that introduced changes to **specific files or directories**.
+
+```bash
+git log -- path/to/file
+```

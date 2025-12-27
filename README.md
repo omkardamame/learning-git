@@ -24,10 +24,10 @@ Each item requires **reading + hands-on practice** before being marked complete.
 
 - ✅ Initializing a repository (`git init`)
 - ✅ File lifecycle (untracked → staged → committed)
-- [ ] `git status` and `git diff`
-- [ ] Staging files (`git add`)
-- [ ] Committing correctly (`git commit`)
-- [ ] Viewing history (`git log`, `--oneline`, `--graph`)
+- ✅ `git status` and `git diff`
+- ✅ Staging files (`git add`)
+- ✅ Committing correctly (`git commit`)
+- ✅ Viewing history (`git log`, `--oneline`, `--graph`)
 - [ ] Undoing mistakes:
   - [ ] `git restore`
   - [ ] `git reset`
