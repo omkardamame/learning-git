@@ -1,9 +1,9 @@
 ---
 
-## ✅ Learning Checklist (Roughly Mapped to Pro Git)
+## ✅ Learning Checklist (Pro Git – 2nd Edition)
 
-This checklist tracks my progress through the **Pro Git (2nd Edition)** book.  
-Each item requires **reading + hands-on practice** before being marked complete.
+This checklist tracks my progress through **Pro Git (2nd Edition)**.  
+Each topic includes **explicit Git commands** to aid future revision.
 
 ---
 
@@ -12,139 +12,198 @@ Each item requires **reading + hands-on practice** before being marked complete.
 - ✅ What version control is and why it matters
 - ✅ Centralized vs Distributed VCS
 - ✅ Short history of Git
-- ✅ Why Git’s design is different (snapshots, not diffs)
+- ✅ What is Git (snapshots, not diffs)
+- ✅ Command-line basics
 - ✅ Installing Git
-- ✅ Basic configuration (`user.name`, `user.email`, editor)
+- ✅ First-time Git setup  
+  (`git config --global user.name`, `git config --global user.email`)
+- ✅ Getting help  
+  (`git help`, `git <command> --help`)
 
-🎯 **Outcome:** Understand *why* Git exists and what problems it solves.
+🎯 **Outcome:** Understand what Git is and how to set it up correctly.
 
 ---
 
 ### 📖 Chapter 2 – Git Basics (CRITICAL)
 
-- ✅ Initializing a repository (`git init`)
-- ✅ File lifecycle (untracked → staged → committed)
-- ✅ `git status` and `git diff`
-- ✅ Staging files (`git add`)
-- ✅ Committing correctly (`git commit`)
-- ✅ Viewing history (`git log`, `--oneline`, `--graph`)
-- [ ] Undoing mistakes:
-  - [ ] `git restore`
-  - [ ] `git reset`
-  - [ ] `git checkout`
-  - [ ] `git revert`
-- [ ] Ignoring files (`.gitignore`)
-- [ ] Removing and moving files (`git rm`, `git mv`)
+- ✅ Getting a repository  
+  (`git init`, `git clone`)
+- ✅ Recording changes  
+  (`git status`, `git add`, `git commit`)
+- ✅ Viewing history  
+  (`git log`, `git log --oneline --graph`)
+- ✅ Undoing things  
+  - ✅ Restore files: `git restore`
+  - ✅ Unstage files: `git restore --staged`
+  - ✅ Reset commits: `git reset`
+  - ✅ Revert commits: `git revert`
+- [ ] Working with remotes  
+  (`git remote`, `git fetch`, `git pull`, `git push`)
+- [ ] Tagging  
+  (`git tag`, `git tag -a`)
+- [ ] Git aliases  
+  (`git config --global alias.*`)
 
-🎯 **Outcome:** Daily Git usage without fear.
+🎯 **Outcome:** Confident daily Git usage without fear.
 
 ---
 
-### 📖 Chapter 3 – Git Branching (MOST IMPORTANT)
+### 📖 Chapter 3 – Branching (MOST IMPORTANT)
 
-- [ ] What branches really are (pointers, not copies)
-- [ ] Creating and switching branches
-- [ ] Fast-forward vs three-way merge
-- [ ] Resolving merge conflicts
-- [ ] Branch management (`-d`, `-D`)
-- [ ] Branching workflows (feature branches)
-- [ ] Understanding `HEAD`
+- [ ] What branches really are  
+  (`git branch`, `git show-branch`)
+- [ ] Creating and switching branches  
+  (`git branch`, `git switch`, `git checkout`)
+- [ ] Merging branches  
+  (`git merge`)
+- [ ] Fast-forward vs three-way merge  
+  (`git merge --no-ff`)
+- [ ] Resolving merge conflicts  
+  (`git status`, manual resolve, `git commit`)
+- [ ] Branch management  
+  (`git branch -d`, `git branch -D`)
+- [ ] Remote branches  
+  (`git branch -r`, `git push -u`)
+- [ ] Rebasing  
+  (`git rebase`, `git rebase -i`)
+- [ ] Understanding `HEAD`  
+  (`git symbolic-ref HEAD`)
 
-🎯 **Outcome:** Full confidence in branching and merging.
+🎯 **Outcome:** Full control over branching and merging.
 
 ---
 
 ### 📖 Chapter 4 – Git on the Server
 
-- [ ] Working with remotes
-- [ ] `git remote`, `fetch`, `pull`, `push`
-- [ ] Tracking branches
-- [ ] Push vs pull behavior
-- [ ] SSH-based authentication
-- [ ] Understanding bare repositories
+- [ ] Git transport protocols  
+  (SSH, HTTP, HTTPS)
+- [ ] Setting up Git on a server  
+  (`git init --bare`)
+- [ ] SSH authentication  
+  (`ssh-keygen`, `authorized_keys`)
+- [ ] Git Daemon
+- [ ] Smart HTTP
+- [ ] GitWeb
+- [ ] GitLab basics
+- [ ] Hosted Git services (GitHub, GitLab, etc.)
 
-🎯 **Outcome:** Collaborate safely with remote repositories.
+🎯 **Outcome:** Understand how Git repositories are hosted and accessed.
 
 ---
 
 ### 📖 Chapter 5 – Distributed Git
 
 - [ ] Centralized vs distributed workflows
-- [ ] Feature branch workflow
-- [ ] Gitflow (understanding, not memorizing)
-- [ ] Forking workflow (GitHub-style)
-- [ ] Contribution best practices
-- [ ] Maintaining a clean history
+- [ ] Feature-branch workflow
+- [ ] Contributing to a project  
+  (`git fetch`, `git rebase`, `git pull --rebase`)
+- [ ] Maintaining a project  
+  (`git merge`, `git tag`, release flow)
 
-🎯 **Outcome:** Work professionally in team environments.
+🎯 **Outcome:** Work effectively in team and open-source environments.
 
 ---
 
-### 📖 Chapter 6 – GitHub (or Hosting Platforms)
+### 📖 Chapter 6 – GitHub
 
-- [ ] Repository hosting concepts
+- [ ] Account setup and configuration
+- [ ] Forking repositories
 - [ ] Pull requests
 - [ ] Code reviews
 - [ ] Issues and discussions
-- [ ] Forking and syncing upstream
-- [ ] Tags and releases
+- [ ] Syncing fork with upstream  
+  (`git remote add upstream`, `git fetch upstream`)
+- [ ] Releases and tags
 
-🎯 **Outcome:** Use Git hosting platforms efficiently.
+🎯 **Outcome:** Professional usage of GitHub for collaboration.
 
 ---
 
-### 📖 Chapter 7 – Git Tools (ADVANCED BUT VALUABLE)
+### 📖 Chapter 7 – Git Tools (ADVANCED & IMPORTANT)
 
-- [ ] `git stash` (save work safely)
-- [ ] Interactive staging (`git add -p`)
-- [ ] Searching history (`git grep`, `git log -S`)
-- [ ] Rewriting history (`commit --amend`)
-- [ ] Rebase vs merge (when and why)
-- [ ] `git reflog` (lifesaver)
+- [ ] Revision selection  
+  (`git log`, `git show`, `git diff`)
+- [ ] Interactive staging  
+  (`git add -p`)
+- [ ] Stashing work  
+  (`git stash`, `git stash pop`, `git stash list`)
+- [ ] Cleaning workspace  
+  (`git clean -fd`)
+- [ ] Searching history  
+  (`git grep`, `git log -S`)
+- [ ] Rewriting history  
+  (`git commit --amend`, `git rebase -i`)
+- [ ] Reset demystified  
+  (`git reset --soft|--mixed|--hard`)
+- [ ] Advanced merging
+- [ ] Rerere  
+  (`git rerere`)
+- [ ] Debugging with Git  
+  (`git bisect`)
+- [ ] Submodules  
+  (`git submodule`)
+- [ ] Bundling  
+  (`git bundle`)
+- [ ] Credential storage
 
-🎯 **Outcome:** Recover from mistakes and keep history clean.
+🎯 **Outcome:** Recover from mistakes and maintain clean history.
 
 ---
 
 ### 📖 Chapter 8 – Customizing Git
 
-- [ ] Git configuration levels
-- [ ] Useful aliases
-- [ ] Diff and merge tools
-- [ ] Improving personal Git workflow
+- [ ] Git configuration levels  
+  (`--system`, `--global`, `--local`)
+- [ ] Git attributes  
+  (`.gitattributes`)
+- [ ] Git hooks  
+  (`.git/hooks`)
+- [ ] Enforced policies (pre-commit, pre-push)
 
-🎯 **Outcome:** Git tailored to your workflow.
-
----
-
-### 📖 Chapter 9 – Git Internals (OPTIONAL BUT POWERFUL)
-
-- [ ] Git objects (blob, tree, commit)
-- [ ] SHA-1 and content addressing
-- [ ] Object storage
-- [ ] References and tags
-- [ ] How Git really stores history
-
-🎯 **Outcome:** Deep understanding; Git stops feeling “magical”.
+🎯 **Outcome:** Git tailored to personal and team workflows.
 
 ---
 
-## 🧭 Progress Tracking Rule
+### 📖 Chapter 9 – Git and Other Systems
 
-A topic is considered **complete only if**:
-- ✔ Read from Pro Git  
-- ✔ Practiced in this repository  
-- ✔ Understood *why*, not just *how*
+- [ ] Using Git as a client
+- [ ] Migrating from other VCS to Git
+
+🎯 **Outcome:** Understand Git interoperability.
+
+---
+
+### 📖 Chapter 10 – Git Internals (OPTIONAL BUT POWERFUL)
+
+- [ ] Plumbing vs porcelain commands
+- [ ] Git objects  
+  (`git cat-file`)
+- [ ] References and HEAD
+- [ ] Packfiles
+- [ ] Refspecs
+- [ ] Transfer protocols
+- [ ] Maintenance and data recovery  
+  (`git fsck`, `git reflog`)
+- [ ] Environment variables
+
+🎯 **Outcome:** Deep mental model of Git internals.
+
+---
+
+## 🧭 Progress Rule
+
+A topic is complete only if:
+- ✔ Read from *Pro Git*
+- ✔ Practiced in this repository
+- ✔ Can recall the related commands later
 
 ---
 
 ## 🏁 End Goal
 
-By completing this checklist, I aim to:
-- Use Git confidently in production
-- Debug broken repositories
-- Maintain clean commit history
-- Work efficiently in teams and open-source projects
+- Confident daily Git usage
+- Clean, intentional commit history
+- Ability to debug and recover repositories
+- Professional Git workflows
 
 ---
-
