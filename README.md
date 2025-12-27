@@ -32,6 +32,7 @@ Each item requires **reading + hands-on practice** before being marked complete.
   - [ ] `git restore`
   - [ ] `git reset`
   - [ ] `git checkout`
+  - [ ] `git revert`
 - [ ] Ignoring files (`.gitignore`)
 - [ ] Removing and moving files (`git rm`, `git mv`)
 
