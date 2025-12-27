@@ -1,6 +1,6 @@
 ---
 
-## ✅ Learning Checklist (Mapped to Pro Git)
+## ✅ Learning Checklist (Roughly Mapped to Pro Git)
 
 This checklist tracks my progress through the **Pro Git (2nd Edition)** book.  
 Each item requires **reading + hands-on practice** before being marked complete.
