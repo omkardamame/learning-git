@@ -826,3 +826,7 @@ Date:   Sun Dec 28 20:57:22 2025 +0530
 ```
 
 When you execute an alias, Git simply **replaces the shorthand** with the full command string you defined. If you wish to run an **external command** rather than a Git subcommand, you can start the alias with the **!** **character**. This is particularly useful if you write your own tools that work with a Git repository, such as aliasing `git visual` to launch `gitk`.
+
+# 2.8 [Summary](https://git-scm.com/book/en/v2/Git-Basics-Summary)
+
+At this point, you can do all the basic local Git operations — creating or cloning a repository, making changes, staging and committing those changes, and viewing the history of all the changes the repository has been through. Next, we’ll cover Git’s killer feature: its branching model.
