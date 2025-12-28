@@ -39,8 +39,8 @@ Each topic includes **explicit Git commands** to aid future revision.
   - ✅ Revert commits: `git revert`
 - ✅ Working with remotes  
   (`git remote`, `git fetch`, `git pull`, `git push`)
-- [ ] Tagging  
-  (`git tag`, `git tag -a`)
+- ✅ Tagging  
+  (`git tag`, `git tag -a`, `git tag -d`, `git psuh origin --delete`)
 - [ ] Git aliases  
   (`git config --global alias.*`)
 
