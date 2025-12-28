@@ -592,3 +592,198 @@ origin	https://github.com/omkardamame/learning-git.git (fetch)
 origin	https://github.com/omkardamame/learning-git.git (push)
 ```
 
+# 2.6 [Tagging](https://git-scm.com/book/en/v2/Git-Basics-Tagging)
+
+Git provides the ability to **tag specific points** in a repository’s history as being important, which is typically used to mark **release points** like v1.0 or v2.0.
+
+**Listing and Searching Tags**
+
+To see existing tags, you can simply run the `git tag` command (optionally with `-l` or `--list`), which displays them in alphabetical order. You can also search for specific patterns using wildcards, such as`git tag -l "v1.8.5"` to see only the 1.8.5 series. Note that the `-l` or `--list` option is **mandatory** if you are supplying a wildcard pattern.
+
+```console
+omkar@black-box:~/study$ git tag -l
+v1.0
+```
+
+**Types of Tags**
+
+Git supports two primary types of tags:
+
+• **Lightweight Tags**: These are essentially a **branch that doesn’t change**; they serve as a simple pointer to a specific commit.
+
+• **Annotated Tags**: These are stored as **full objects** in the Git database. They are checksummed and contain the **tagger name, email, date, and a tagging message**. It is generally recommended to use annotated tags for formal releases so that all this metadata is preserved.
+
+**Showing tags' info**
+
+You can see the tag data along with the commit that was tagged by using the `git show` command:
+
+```console
+omkar@black-box:~/study$ git show v1.0
+tag v1.0
+Tagger: Omkar Damame <omkardamame.work@gmail.com>
+Date:   Sun Dec 28 15:53:06 2025 +0530
+
+Initial version.
+
+commit 02ccf8d6e5cdad98e3d3b3b9dc5b7aa2fcbd1106 (tag: v1.0)
+Author: Omkar Damame <omkardamame.work@gmail.com>
+Date:   Thu Dec 25 15:53:29 2025 +0530
+
+    Initial commit for studying
+```
+
+**Creating Tags**
+
+• **Annotated Tag**: Use the **-a** flag and specify a message with **-m** (e.g., `$ git tag -a v1.4 -m "my version 1.4"`).
+
+```console
+omkar@black-box:~/study$ git tag -a latest -m "latest"
+omkar@black-box:~/study$ git tag --list
+latest
+v1.0
+```
+
+• **Lightweight Tag**: Provide only the tag name without any options (e.g., `git tag v1.4-lw`).
+
+```console
+omkar@black-box:~/study$ git tag v1.1
+omkar@black-box:~/study$ git tag --list
+latest
+latest2
+v1.0
+v1.1
+omkar@black-box:~/study$ git log --pretty=oneline
+498df3501d65dab86615f08332f3a93e20c1bbf4 (HEAD -> main, tag: v1.1, tag: latest2, tag: latest, origin/main) Updated README.md and updated Chapter 2 summary.
+```
+
+• **Tagging Later**: You can tag commits after you have moved past them by specifying the **commit checksum** (or part of it) at the end of the command (e.g., `$ git tag -a v1.2 9fceb02`).
+
+```console
+omkar@black-box:~/study$ git tag -a v1.0 02ccf8d6e5cdad98e3d3b3b9dc5b7aa2fcbd1106 -m "Initial version."
+omkar@black-box:~/study$ git tag
+v1.0
+```
+
+**Sharing and Deleting Tags**
+
+By default, the `git push` command **does not transfer tags** to remote servers. You must explicitly push them using `git push origin <tagname>` or push all your local tags at once using `git push origin --tags`.
+
+- **Explicitly pushing a single/latest tag**
+
+```console
+omkar@black-box:~/study$ git log --oneline
+498df35 (HEAD -> main, tag: v1.1, tag: latest, origin/main) Updated README.md and updated Chapter 2 summary.
+omkar@black-box:~/study$ git tag latest2
+omkar@black-box:~/study$ git tag
+latest
+latest2
+v1.0
+v1.1
+omkar@black-box:~/study$ git push origin latest2
+Total 0 (delta 0), reused 0 (delta 0), pack-reused 0
+To https://github.com/omkardamame/learning-git.git
+ * [new tag]         latest2 -> latest2
+omkar@black-box:~/study$ 
+omkar@black-box:~/study$ git log --oneline
+498df35 (HEAD -> main, tag: v1.1, tag: latest2, tag: latest, origin/main) Updated README.md and updated Chapter 2 summary.
+```
+
+- **Pushing multiple tags at once**
+
+```console
+omkar@black-box:~/study$ git tag
+latest
+v1.0
+v1.1
+omkar@black-box:~/study$ git push origin --tags
+Enumerating objects: 1, done.
+Counting objects: 100% (1/1), done.
+Writing objects: 100% (1/1), 173 bytes | 173.00 KiB/s, done.
+Total 1 (delta 0), reused 0 (delta 0), pack-reused 0
+To https://github.com/omkardamame/learning-git.git
+ * [new tag]         latest -> latest
+ * [new tag]         v1.0 -> v1.0
+ * [new tag]         v1.1 -> v1.1
+```
+
+To delete a tag:
+
+• **Locally**: Use `git tag -d <tagname>`.
+
+```console
+omkar@black-box:~/study$ git tag
+latest
+latest2
+v1.0
+v1.1
+omkar@black-box:~/study$ git tag -d latest2
+Deleted tag 'latest2' (was 7eb1c34)
+omkar@black-box:~/study$ 
+omkar@black-box:~/study$ git tag
+latest
+v1.0
+v1.1
+```
+
+*Note: `git log` only shows local commits and changes.*
+
+• **Remotely**: Use the more intuitive `git push origin --delete <tagname>` command.
+
+```console
+omkar@black-box:~/study$ git push origin --delete test2
+To https://github.com/omkardamame/learning-git.git
+ - [deleted]         test2
+```
+
+*Note: `git ls-remote --tags origin` shows remote tags for commits.
+
+**Checking Out Tags**
+
+If you use `git checkout <tagname>` to view the files at that point in history, your repository enters a **“detached HEAD” state**. 
+In this state, any new commits you make will not belong to any branch and will be unreachable except by their exact hash. 
+If you need to make changes to a tagged version (such as fixing a bug on an older release), you should **create a new branch** at that tag instead using `git checkout -b <branchname> <tagname>` which is a really good practice.
+
+```console
+omkar@black-box:~/study$ git checkout -b learning-checkout-via-new-branch v1.0
+Switched to a new branch 'learning-checkout-via-new-branch'
+omkar@black-box:~/study$ ls
+CONTRIBUTING.md  git-checkout-testfile  README.md
+omkar@black-box:~/study$ git add .
+omkar@black-box:~/study$ git commit -m "Learning how to checkout after creating a new branch for it."
+[learning-checkout-via-new-branch 47791bd] Learning how to checkout after creating a new branch for it.
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+ create mode 100644 git-checkout-testfile
+omkar@black-box:~/study$ git push
+fatal: The current branch learning-checkout-via-new-branch has no upstream branch.
+To push the current branch and set the remote as upstream, use
+
+    git push --set-upstream origin learning-checkout-via-new-branch
+
+To have this happen automatically for branches without a tracking
+upstream, see 'push.autoSetupRemote' in 'git help config'.
+
+omkar@black-box:~/study$ git push --set-upstream origin learning-checkout-via-new-branch 
+Enumerating objects: 4, done.
+Counting objects: 100% (4/4), done.
+Delta compression using up to 12 threads
+Compressing objects: 100% (2/2), done.
+Writing objects: 100% (3/3), 319 bytes | 319.00 KiB/s, done.
+Total 3 (delta 1), reused 0 (delta 0), pack-reused 0
+remote: Resolving deltas: 100% (1/1), completed with 1 local object.
+remote: 
+remote: Create a pull request for 'learning-checkout-via-new-branch' on GitHub by visiting:
+remote:      https://github.com/omkardamame/learning-git/pull/new/learning-checkout-via-new-branch
+remote: 
+To https://github.com/omkardamame/learning-git.git
+ * [new branch]      learning-checkout-via-new-branch -> learning-checkout-via-new-branch
+branch 'learning-checkout-via-new-branch' set up to track 'origin/learning-checkout-via-new-branch'.
+omkar@black-box:~/study$ 
+omkar@black-box:~/study$ git switch main
+Switched to branch 'main'
+Your branch is up to date with 'origin/main'.
+omkar@black-box:~/study$ ls
+CODE_OF_CONDUCT.md  CONTRIBUTING.md  LICENSE  README.md  summary
+```
+
+# 2.7 [Git Aliases](https://git-scm.com/book/en/v2/Git-Basics-Git-Aliases)
+
