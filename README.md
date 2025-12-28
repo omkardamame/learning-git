@@ -41,7 +41,7 @@ Each topic includes **explicit Git commands** to aid future revision.
   (`git remote`, `git fetch`, `git pull`, `git push`)
 - ✅ Tagging  
   (`git tag`, `git tag -a`, `git tag -d`, `git psuh origin --delete`)
-- [ ] Git aliases  
+- ✅ Git aliases  
   (`git config --global alias.*`)
 
 🎯 **Outcome:** Confident daily Git usage without fear.

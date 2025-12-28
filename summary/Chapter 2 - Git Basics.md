@@ -787,3 +787,42 @@ CODE_OF_CONDUCT.md  CONTRIBUTING.md  LICENSE  README.md  summary
 
 # 2.7 [Git Aliases](https://git-scm.com/book/en/v2/Git-Basics-Git-Aliases)
 
+Git aliases are a feature designed to make your experience **simpler, easier, and more familiar**. Since Git does not **automatically infer** partially typed commands, you can use **git config** to create shorthand versions of frequently used verbs. Common examples include aliasing `checkout` to `co`, `commit` to `ci`, and `status` to `st`.
+
+```console
+git config --global alias.co checkout
+git config --global alias.br branch
+git config --global alias.ci commit
+git config --global alias.st status
+```
+
+So basically if you want to do `git commit -m "Test"`, you'll just type `git ci -m "Test"`.
+
+You can also use this technique to **create new commands** that you feel should exist to improve usability. For instance, you can create an `unstage` alias for `reset HEAD --` to make the process of moving files out of the staging area clearer. Another common use is a `last` alias configured as `log -1 HEAD`, which allows you to see the **most recent commit** easily.
+
+```console
+git config --global alias.unstage 'reset HEAD --'
+git unstage fileA
+git reset HEAD -- fileA
+```
+
+It's also common to add a `last` command, like this:
+
+```console
+git config --global alias.last 'log -1 HEAD'
+```
+
+This way, you can see the last commit easily:
+
+```console
+omkar@black-box:~/study$ git config --global alias.last 'log -1 HEAD'
+omkar@black-box:~/study$ git last
+commit 8b6196d5f775ba5803186dca34595eeba3220aac (HEAD -> main, origin/main)
+Author: Omkar Damame <omkardamame.work@gmail.com>
+Date:   Sun Dec 28 20:57:22 2025 +0530
+
+    Forgot to add updated notes of git tag 😅
+
+```
+
+When you execute an alias, Git simply **replaces the shorthand** with the full command string you defined. If you wish to run an **external command** rather than a Git subcommand, you can start the alias with the **!** **character**. This is particularly useful if you write your own tools that work with a Git repository, such as aliasing `git visual` to launch `gitk`.
