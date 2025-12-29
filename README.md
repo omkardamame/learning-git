@@ -54,7 +54,7 @@ Each topic includes **explicit Git commands** to aid future revision.
   (`git branch`, `git show-branch`)
 - ✅ Creating and switching branches  
   (`git branch`, `git switch`, `git checkout`)
-- [ ] Merging branches  
+- ✅ Merging branches  
   (`git merge`)
 - [ ] Fast-forward vs three-way merge  
   (`git merge --no-ff`)
