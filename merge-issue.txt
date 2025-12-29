@@ -13,3 +13,7 @@ This is the text I am gonna change and made some changes from main.
 This is the text I am gonna change and I am in new branch now.
 >>>>>>> learning-to-resolve-merge-issues
 ```
+
+==========
+
+This is a new text to create merge issue but wanna resolve it using git merge --no-ff.
