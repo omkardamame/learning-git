@@ -197,3 +197,164 @@ omkar@black-box:~/study$ git log --oneline --decorate --graph --all
 *Create a new branch and switch to it: `git switch -c new-branch`. The `-c` flag stands for create, you can also use the full flag: `--create`
 *Return to your previously checked out branch: `git switch -`
 
+# 3.2 [Basic Branching and Merging](https://git-scm.com/book/en/v2/Git-Branching-Basic-Branching-and-Merging)
+
+Basic branching and merging in Git follows a cycle of diverging from a main line of development to work on specific tasks and then integrating that work back once it is stable and then moving on with your previous/new work.
+
+**The Basic Branching Workflow**
+
+To understand this in a real-world context, imagine you are working on a website and receive a request to fix a specific issue (#53).
+
+1. **Create a New Branch**: You create a branch and switch to it in one step using **git checkout -b iss53**. This is shorthand for running `git branch iss53` followed by `git checkout iss53`.
+
+2. **Work and Commit**: As you work, the `iss53` branch pointer moves forward with each commit because your **HEAD** (the pointer to your current location) is pointing to it.
+
+3. **The Interruption**: You receive a call for a critical production hotfix. Before you switch back to your production branch, ensure your working directory is clean, as uncommitted changes that conflict with the target branch will prevent you from switching.
+
+4. **Create a Hotfix**: You switch to `master` or `main` (whatever your production branch is) via `git checkout master`. Your working directory is automatically reset to look exactly like it did at the last commit on `master`. You then create a new branch for the fix: `git checkout -b hotfix`.
+
+**Merging and Fast-Forwards**
+
+Once the hotfix is tested and ready, you must merge it back into your production branch to deploy it.
+
+• **Fast-Forward Merge**: You switch to the branch you want to merge _into_ (`master`) and run **git merge hotfix**. Because the `hotfix` branch points to a commit that is a direct descendant of the commit you are currently on, Git performs a **"fast-forward"**. This means Git simply moves the branch pointer forward because there is no divergent work to reconcile.
+
+• **Cleanup**: After the fix is deployed, you no longer need the temporary branch and can delete it using **git branch -d hotfix**.
+
+**Three-Way Merges**
+
+After finishing the hotfix, you return to your original work on `iss53`. When that feature is finally complete, you merge it into `master` by running `git merge master`, or you can wait to integrate those changes until you decide to pull the `iss53` branch back into `master` later.
+
+Unlike the hotfix merge, your development history has now diverged. Because the current commit on `master` is not a direct ancestor of `iss53`, Git performs a **three-way merge**. It uses:
+
+1. The snapshot at the tip of the first branch (`master`).
+
+![[basic-merging-1.png]]
+
+2. The snapshot at the tip of the second branch (`iss53`).
+
+3. The **common ancestor** of the two branches.
+
+![[basic-merging-2.png]]
+
+Instead of just moving a pointer, Git creates a new snapshot and a special **merge commit** that has more than one parent.
+
+**Basic Merge Conflicts**
+
+If you changed the exact same part of the same file in both branches, Git cannot merge them automatically and will report a **merge conflict**.
+
+• **Checking Status**: Running **git status** will show you which files are "unmerged".
+
+```console
+omkar@black-box:~/study$ git merge learning-to-resolve-merge-issues 
+Auto-merging merge-issue.txt
+CONFLICT (content): Merge conflict in merge-issue.txt
+Automatic merge failed; fix conflicts and then commit the result.
+
+omkar@black-box:~/study$ git status
+On branch main
+Your branch is up to date with 'origin/main'.
+
+You have unmerged paths.
+  (fix conflicts and run "git commit")
+  (use "git merge --abort" to abort the merge)
+
+Unmerged paths:
+  (use "git add <file>..." to mark resolution)
+	both modified:   merge-issue.txt
+
+no changes added to commit (use "git add" and/or "git commit -a")
+```
+
+• **Conflict Markers**: Git adds standard markers to the affected files. The content between `<<<<<<< HEAD` and `=======` is the version from your current branch, while the content between `=======` and `>>>>>>>` is from the branch being merged in. For example,
+
+```console
+omkar@black-box:~/study$ git merge learning-to-resolve-merge-issues 
+error: Merging is not possible because you have unmerged files.
+hint: Fix them up in the work tree, and then use 'git add/rm <file>'
+hint: as appropriate to mark resolution and make a commit.
+fatal: Exiting because of an unresolved conflict.
+
+omkar@black-box:~/study$ cat merge-issue.txt 
+This is some random text here which is gonna be the same across branches.
+
+<<<<<<< HEAD
+This is the text I am gonna change and made some changes from main.
+=======
+This is the text I am gonna change and I am in new branch now.
+>>>>>>> learning-to-resolve-merge-issues
+```
+
+• **Resolution**: You must manually edit the file to resolve the differences. Once fixed, run **git add** on the file to mark it as resolved.
+
+• **Finalizing**: After all conflicts are staged, run **git commit** to finalize the merge commit and do `git push`. If you find the manual process difficult, you can use **git mergetool** to launch a graphical resolution helper (You'll need to configure it).
+
+```console
+omkar@black-box:~/study$ git log --oneline --graph --all
+*   b12cf96 (HEAD -> main, origin/main) Resolved merge issues.
+|\  
+| * 7d72ea5 (origin/learning-to-resolve-merge-issues, learning-to-resolve-merge-issues) Made minor change in merge-issue.txt file
+* | 2362549 Made minor changes to produce merge issues.
+|/  
+* e2ab314 Prepared a file for merge-issue testing.
+* d5179fb Started and added Chapter 3 summary
+```
+
+## `git merge --no-ff`
+
+### What it does:
+
+- Forces Git to create a **merge commit**, even if a fast-forward is possible.
+- Preserves the **branch structure** in the commit history.
+- Useful for keeping track of feature branches and their commits.
+
+### Syntax:
+
+```bash
+git merge --no-ff <branch>
+```
+
+### Benefits:
+
+- **Clear history:** Shows explicitly which commits came from a feature branch.
+- **Easy reverts:** Reverting a feature branch can be done by reverting the merge commit.
+- **Collaboration-friendly:** Makes branch development visible in logs and graphs.
+- **Auditability:** Helpful for enterprise and long-term projects.
+
+### Behavior with conflicts:
+
+- Conflicts are handled **the same way as a normal merge**:
+    - Git stops and marks conflicts in files.
+    - You resolve conflicts manually.
+    - You stage (`git add`) and commit the merge.
+- Even if a fast-forward was possible, a merge commit is still created.
+
+### Example:
+
+```console
+# Branch structure before merge
+main:    A --- B
+feature:     C --- D
+
+# Merge with --no-ff
+git checkout main
+git merge --no-ff feature
+
+# Branch structure after merge
+main:    A --- B --- M
+              \   /
+feature:       C --- D
+```
+
+Here `M` is the merge commit created by `--no-ff`
+
+Here is how you can find `--no-ff` is used
+
+```console
+* a0c6e91 (HEAD -> main) ...
+|\  
+| * 98055bd ... (Branch A)
+* | 583ed4d ... (Branch B)
+|/
+```
+
