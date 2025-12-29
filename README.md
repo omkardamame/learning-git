@@ -50,9 +50,9 @@ Each topic includes **explicit Git commands** to aid future revision.
 
 ### 📖 Chapter 3 – Branching (MOST IMPORTANT)
 
-- [ ] What branches really are  
-  (`git branch`, `git show-branch`)
-- [ ] Creating and switching branches  
+- ✅ What branches really are  
+  (`git branch`, `git show-branch`, `git branch -r`)
+- ✅ Creating and switching branches  
   (`git branch`, `git switch`, `git checkout`)
 - [ ] Merging branches  
   (`git merge`)
