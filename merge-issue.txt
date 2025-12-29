@@ -1,3 +1,15 @@
 This is some random text here which is gonna be the same across branches.
 
+This is the text I am gonna change and I am in new branch now.
+
+I am gonna keep changes from new branch from now on.
+
+Btw this was the old text
+
+```
+<<<<<<< HEAD
 This is the text I am gonna change and made some changes from main.
+=======
+This is the text I am gonna change and I am in new branch now.
+>>>>>>> learning-to-resolve-merge-issues
+```
