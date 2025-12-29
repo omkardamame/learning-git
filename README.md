@@ -56,9 +56,9 @@ Each topic includes **explicit Git commands** to aid future revision.
   (`git branch`, `git switch`, `git checkout`)
 - ✅ Merging branches  
   (`git merge`)
-- [ ] Fast-forward vs three-way merge  
-  (`git merge --no-ff`)
-- [ ] Resolving merge conflicts  
+- ✅ Fast-forward vs three-way merge  
+  (`git merge`, `git merge --no-ff`)
+- ✅ Resolving merge conflicts  
   (`git status`, manual resolve, `git commit`)
 - ✅ Branch management  
   (`git branch -d`, `git branch -D`)
