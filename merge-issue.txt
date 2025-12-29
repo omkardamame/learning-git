@@ -17,3 +17,5 @@ This is the text I am gonna change and I am in new branch now.
 ==========
 
 This is a new text to create merge issue but wanna resolve it using git merge --no-ff and some random text here.
+
+RRRRRRRREEEEEEEEEEEEEEEE
