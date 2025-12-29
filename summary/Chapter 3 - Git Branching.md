@@ -358,3 +358,116 @@ Here is how you can find `--no-ff` is used
 |/
 ```
 
+# 3.3 [Branch Management](https://git-scm.com/book/en/v2/Git-Branching-Branch-Management)
+
+The **git branch** **command** is the primary tool for managing branches, allowing you to list, create, delete, and rename them.
+
+**Listing and Identifying Branches**
+
+Running the command with no arguments provides a simple list of your current local branches.
+
+```console
+omkar@black-box:~/study$ git branch
+  learning-checkout-via-new-branch
+  learning-to-create-new-branch
+  learning-to-resolve-merge-issues
+* main
+```
+
+• **The Current Branch**: The branch prefixed with an `asterisk (*)` is the one you currently have checked out, meaning **HEAD** points to it. Any new commits you make will advance this specific branch pointer.
+
+• **Detailed View**: To see the **last commit** made on each branch, you can run `git branch -v`.
+
+```console
+omkar@black-box:~/study$ git branch -v
+  learning-checkout-via-new-branch 47791bd Learning how to checkout after creating a new branch for it.
+  learning-to-create-new-branch    5600bbe Created another random file
+  learning-to-resolve-merge-issues 98055bd Added a random text to introduce merge issue.
+* main                             4d049c9 Updated README.md and learned how to resolve conflicts.
+```
+
+**Filtering by Merge Status**
+
+You can filter the branch list to see which branches have or have not yet been integrated into your current work.
+
+• **Merged Branches**: `git branch --merged` lists branches that have already been merged into the branch you are currently on. These are generally **safe to delete** using **git branch -d** because you have already incorporated their work elsewhere.
+
+```console
+omkar@black-box:~/study$ git branch --merged
+  learning-checkout-via-new-branch
+  learning-to-create-new-branch
+  learning-to-resolve-merge-issues
+* main
+```
+
+• **Unmerged Branches**: `git branch --no-merged` lists branches containing work that is not yet in your current branch.
+
+```console
+omkar@black-box:~/study$ git branch --no-merged
+  test-branch
+```
+
+• **Safe Deletion**: If you attempt to delete an unmerged branch (made commit but didn't push) with `-d`, Git will block the operation with an error to prevent the **permanent loss of work**. To delete it anyway, you must use the force flag: `git branch -D <branchname>`.
+
+```console
+omkar@black-box:~/study$ git switch main
+Already on 'main'
+Your branch is up to date with 'origin/main'.
+
+omkar@black-box:~/study$ git checkout -b unmerged-branch
+Switched to a new branch 'unmerged-branch'
+
+omkar@black-box:~/study$ echo "test" > unmerged.txt
+omkar@black-box:~/study$ git add unmerged.txt 
+omkar@black-box:~/study$ git commit -m "Unmerged commit"
+[unmerged-branch a7b3832] Unmerged commit
+ 1 file changed, 1 insertion(+)
+ create mode 100644 unmerged.txt
+omkar@black-box:~/study$ git switch main
+Switched to branch 'main'
+Your branch is up to date with 'origin/main'.
+
+omkar@black-box:~/study$ git branch -d unmerged-branch 
+error: the branch 'unmerged-branch' is not fully merged.
+If you are sure you want to delete it, run 'git branch -D unmerged-branch'
+omkar@black-box:~/study$ git branch -D unmerged-branch
+Deleted branch unmerged-branch (was a7b3832).
+```
+
+• **Advanced Filtering**: You can check the merge status of branches relative to a branch other than your current one by adding that branch name as an argument.
+
+    ◦ Example: To see what is not merged into `main` while you are on a different branch: `git branch --no-merged main`.
+
+**Changing Branch Names**
+
+You can rename a branch locally using the **--move** flag.
+
+• **Example**: To rename `bad-branch-name` to `corrected-branch-name`: `git branch --move bad-branch-name corrected-branch-name`.
+
+```console
+omkar@black-box:~/study$ git branch
+  learning-checkout-via-new-branch
+  learning-to-create-new-branch
+  learning-to-resolve-merge-issues
+* main
+  test
+omkar@black-box:~/study$ git branch --move test test2
+omkar@black-box:~/study$ git branch
+  learning-checkout-via-new-branch
+  learning-to-create-new-branch
+  learning-to-resolve-merge-issues
+* main
+  test2
+```
+
+• **Remote Synchronization**: This change is only local; to update the server, you must push the new name (`git push --set-upstream origin corrected-branch-name`) and then delete the old name from the remote (`git push origin --delete bad-branch-name`).
+
+**Renaming the Default Branch (Master to Main)**
+
+Changing the name of a primary branch like `master` or `main` is a significant operation that can **break integrations, release scripts, and CI/CD pipelines**.
+
+1. **Rename locally**: `git branch --move master main`.
+
+2. **Push to remote**: `git push --set-upstream origin main`.
+
+3. **Cleanup**: You must then update all project dependencies, test configurations, and documentation to reflect the new name before finally deleting the old `master` branch on the remote.
