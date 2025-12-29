@@ -51,7 +51,7 @@ Each topic includes **explicit Git commands** to aid future revision.
 ### 📖 Chapter 3 – Branching (MOST IMPORTANT)
 
 - ✅ What branches really are  
-  (`git branch`, `git show-branch`, `git branch -r`)
+  (`git branch`, `git show-branch`)
 - ✅ Creating and switching branches  
   (`git branch`, `git switch`, `git checkout`)
 - [ ] Merging branches  
@@ -60,9 +60,9 @@ Each topic includes **explicit Git commands** to aid future revision.
   (`git merge --no-ff`)
 - [ ] Resolving merge conflicts  
   (`git status`, manual resolve, `git commit`)
-- [ ] Branch management  
+- ✅ Branch management  
   (`git branch -d`, `git branch -D`)
-- [ ] Remote branches  
+- ✅ Remote branches  
   (`git branch -r`, `git push -u`)
 - [ ] Rebasing  
   (`git rebase`, `git rebase -i`)
