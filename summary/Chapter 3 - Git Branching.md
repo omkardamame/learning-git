@@ -229,13 +229,13 @@ Unlike the hotfix merge, your development history has now diverged. Because the 
 
 1. The snapshot at the tip of the first branch (`master`).
 
-![[basic-merging-1.png]](basic-merging-1.png)
+![[basic-merging-1.png]]
 
 2. The snapshot at the tip of the second branch (`iss53`).
 
 3. The **common ancestor** of the two branches.
 
-![[basic-merging-2.png]](basic-merging-2.png)
+![[basic-merging-2.png]]
 
 Instead of just moving a pointer, Git creates a new snapshot and a special **merge commit** that has more than one parent.
 
@@ -471,3 +471,128 @@ Changing the name of a primary branch like `master` or `main` is a significant o
 2. **Push to remote**: `git push --set-upstream origin main`.
 
 3. **Cleanup**: You must then update all project dependencies, test configurations, and documentation to reflect the new name before finally deleting the old `master` branch on the remote.
+
+# 3.4 [Branching Workflows](https://git-scm.com/book/en/v2/Git-Branching-Branching-Workflows)
+
+The lightweight nature of Git branching allows for several different types of **branching workflows** that can be incorporated into a development cycle. These workflows generally fall into two categories: **long-running branches** and **short-lived topic branches**.
+
+**Long-Running Branches**
+
+Because Git uses a simple three-way merge, it is easy to merge from one branch to another repeatedly over long periods. Many Git developers use a **progressive-stability** workflow:
+
+• **The Master/Main Branch:** Only code that is **entirely stable**—often only code that has been or will be released—is kept in the `master` (or `main`) branch.
+
+• **Parallel Branches:** A parallel branch, often named `develop` or `next`, is used for active work or stability testing. It is not always stable but is merged into `master` once it reaches a stable state.
+
+• **Silos of Stability:** Larger projects may have even more levels, such as a `proposed` or `pu` (proposed updates) branch for integrated work that isn't quite ready for the `next` branch. Commits graduate to a **more stable silo** only when they are fully tested.
+
+**Topic Branches**
+
+A **topic branch** is a **short-lived branch** created for a single particular feature or piece of related work. In Git, it is common to create, work on, merge, and delete these branches multiple times a day.
+
+• **Context Switching:** This technique allows you to **switch contexts quickly** and completely, as each branch acts as a silo where all changes are related to a specific topic.
+
+• **Isolation:** You can keep these changes in their silo for minutes or months, merging them only when they are ready, regardless of the order in which they were created.
+
+• **Local Nature:** It is important to remember that these branching and merging operations are **completely local**; no communication with a server is required.
+
+**Examples from the Sources**
+
+• **Stability Levels:** In a linear view, a `master` branch might point to commit `C1`, while `develop` points to `C5` and a `topic` branch points to `C7`, representing **increasing levels of bleeding-edge code**.
+
+• **Iterative Features:** You might branch `iss91` from `master` to work on a feature. If you want to try a different approach, you can branch `iss91v2` off of `iss91`. Meanwhile, you can switch back to `master` and branch `dumbidea` to experiment with a risky fix.
+
+• **Final Integration:** After review, you might decide the second solution (`iss91v2`) and the `dumbidea` were best. You would then **merge those two into** **master** and throw away the original `iss91` branch.
+
+# 3.5 [Remote Branches](https://git-scm.com/book/en/v2/Git-Branching-Remote-Branches)
+
+**Remote references** are pointers (references) in your remote repositories, including branches, tags, and more. The most common way to interact with these is through **remote-tracking branches**, which act as local references to the state of remote branches. These branches are non-movable bookmarks that Git moves for you whenever you perform network communication to ensure they accurately represent the state of the remote repository.
+
+You can get a full list of remote references explicitly with `git ls-remote <remote_git_url>`, or `git remote show <remote_git_url>`, `git remote show` for remote branches as well as more information.
+
+**Remote-Tracking Branch Naming and Defaults**
+
+Remote-tracking branches take the form `<remote>/<branch>`. For example, to see what the `master` branch on your `origin` remote looked like the last time you connected, you would check the `origin/master` branch.
+
+The name **origin** is not special; it is simply the default name Git gives to the server when you run the `git clone` command. Just as `master` is a default branch name that can be changed, you can use the `-o` flag during a clone (e.g., `git clone -o blayt`) to name your default remote branch `blayt/master` instead.
+
+**Synchronizing with Remotes**
+
+• **Fetching**: To synchronize your work, run `git fetch <remote>` (e.g., `origin`). This command fetches any data from that server that you don't yet have and moves your local `origin/master` pointer to its new, more up-to-date position.
+
+```console
+omkar@black-box:~/study$ git fetch blayt
+From https://github.com/omkardamame/learning-git
+ * [new branch]      learning-checkout-via-new-branch -> blayt/learning-checkout-via-new-branch
+ * [new branch]      learning-to-create-new-branch    -> blayt/learning-to-create-new-branch
+ * [new branch]      learning-to-resolve-merge-issues -> blayt/learning-to-resolve-merge-issues
+ * [new branch]      main                             -> blayt/main
+```
+
+• **Adding New Remotes**: You can add additional internal or team-based servers using `git remote add <shortname> <url>`. For instance, adding a remote named `teamone` allows you to run `git fetch teamone` to see their work represented as `teamone/master`.
+
+```console
+omkar@black-box:~/study$ git remote add blayt https://github.com/omkardamame/learning-git.git
+
+omkar@black-box:~/study$ git fetch
+
+omkar@black-box:~/study$ git remote -v
+blayt	https://github.com/omkardamame/learning-git.git (fetch)
+blayt	https://github.com/omkardamame/learning-git.git (push)
+origin	https://github.com/omkardamame/learning-git.git (fetch)
+origin	https://github.com/omkardamame/learning-git.git (push)
+
+omkar@black-box:~/study$ git branch -r
+  origin/learning-checkout-via-new-branch
+  origin/learning-to-create-new-branch
+  origin/learning-to-resolve-merge-issues
+  origin/main
+
+omkar@black-box:~/study$ git fetch blayt
+From https://github.com/omkardamame/learning-git
+ * [new branch]      learning-checkout-via-new-branch -> blayt/learning-checkout-via-new-branch
+ * [new branch]      learning-to-create-new-branch    -> blayt/learning-to-create-new-branch
+ * [new branch]      learning-to-resolve-merge-issues -> blayt/learning-to-resolve-merge-issues
+ * [new branch]      main                             -> blayt/main
+omkar@black-box:~/study$ 
+omkar@black-box:~/study$ git branch -r
+  blayt/learning-checkout-via-new-branch
+  blayt/learning-to-create-new-branch
+  blayt/learning-to-resolve-merge-issues
+  blayt/main
+  origin/learning-checkout-via-new-branch
+  origin/learning-to-create-new-branch
+  origin/learning-to-resolve-merge-issues
+  origin/main
+```
+
+• **Pushing**: To share a local branch named `serverfix`, you must explicitly push it using `git push origin serverfix`.
+
+• **Rename on Push**: You can push a local branch to a remote branch with a different name using the format `git push origin <local_branch>:<remote_branch>` (e.g., `$ git push origin serverfix:awesomebranch`). You'll have to resolve merge conflicts if there are any. Also it doesn't matter if branch is not created already.
+
+```console
+omkar@black-box:~/study$ git push origin test:test-new
+Total 0 (delta 0), reused 0 (delta 0), pack-reused 0
+To https://github.com/omkardamame/learning-git.git
+   09f2aa5..486e065  test -> test-new
+```
+
+**Tracking Branches**
+
+Checking out a local branch from a remote-tracking branch automatically creates a **tracking branch** (also called an **upstream branch**). These local branches have a direct relationship with a remote branch; if you run `git pull` while on one, Git automatically knows which server to fetch from and which branch to merge in.
+
+**Common Examples for Creating Tracking Branches:**
+
+• **Standard Method**: `git checkout -b serverfix origin/serverfix` | This creates and adds branch locally
+
+• **Shorthand Flag**: `git checkout --track origin/serverfix` | This just adds the branch locally.
+
+• **Automatic Shortcut**: If the branch you are trying to check out doesn't exist locally but matches a name on exactly one remote, Git creates a tracking branch for you: `git checkout serverfix` | Adds branch locally.
+
+• **Setting Upstream Later**: To change the upstream branch for an existing local branch, use `git branch -u origin/serverfix`.
+
+**Inspecting and Deleting Remote Branches**
+
+• **Detailed Status**: Use `git branch -vv` to see which local branches are tracking remote branches and whether you are "ahead," "behind," or both. Note that this command uses cached data; to get up-to-date numbers, you should run `git fetch --all`  `git branch -vv`.
+
+• **Deletion**: If you are finished with a remote branch, you can delete it from the server using the **--delete** option: `git push origin --delete serverfix`. This operation simply removes the pointer from the server; the underlying data is generally kept until a garbage collection runs.
