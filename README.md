@@ -62,10 +62,12 @@ Each topic includes **explicit Git commands** to aid future revision.
   (`git status`, manual resolve, `git commit`)
 - ✅ Branch management  
   (`git branch -d`, `git branch -D`)
-- ✅ Remote branches  
+- ✅ Remote branches management  
   (`git branch -r`, `git push -u`)
 - ✅ Detailed Branch management and renaming
   (`git branch --no-merged`, `git branch --merged`, `git branch --no-merged main`, `git branch --move`, `git push --set-upstream`)
+- ✅ Branching workflows, fetching, tracking, pruning, deleting
+  (`git fetch`, `git checkout`, `git remote add`, `git fetch --prune`, `git push origin --delete`)
 - [ ] Rebasing  
   (`git rebase`, `git rebase -i`)
 - [ ] Understanding `HEAD`  
