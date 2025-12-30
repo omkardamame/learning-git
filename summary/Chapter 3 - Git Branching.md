@@ -229,13 +229,13 @@ Unlike the hotfix merge, your development history has now diverged. Because the 
 
 1. The snapshot at the tip of the first branch (`master`).
 
-![[basic-merging-1.png]]
+![[basic-merging-1.png]](basic-merging-1.png)
 
 2. The snapshot at the tip of the second branch (`iss53`).
 
 3. The **common ancestor** of the two branches.
 
-![[basic-merging-2.png]]
+![[basic-merging-2.png]]((basic-merging-2.png))
 
 Instead of just moving a pointer, Git creates a new snapshot and a special **merge commit** that has more than one parent.
 
