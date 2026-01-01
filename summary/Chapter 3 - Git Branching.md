@@ -596,3 +596,114 @@ Checking out a local branch from a remote-tracking branch automatically creates 
 • **Detailed Status**: Use `git branch -vv` to see which local branches are tracking remote branches and whether you are "ahead," "behind," or both. Note that this command uses cached data; to get up-to-date numbers, you should run `git fetch --all`  `git branch -vv`.
 
 • **Deletion**: If you are finished with a remote branch, you can delete it from the server using the **--delete** option: `git push origin --delete serverfix`. This operation simply removes the pointer from the server; the underlying data is generally kept until a garbage collection runs.
+
+# 3.6 [Rebasing](https://git-scm.com/book/en/v2/Git-Branching-Rebasing)
+
+In Git, there are two primary ways to integrate changes from one branch into another: merging and **rebasing**. While merging performs a three-way merge between two latest branch snapshots and their common ancestor, rebasing takes the **patch of the change** introduced in one branch and **reapplies it on top** of another.
+
+**The Basic Rebase Operation**
+
+Rebasing works by following these internal steps:
+
+1. Identifying the **common ancestor** of the two branches.
+
+2. Getting the **diff** introduced by each commit of the branch you are currently on and saving those diffs to **temporary files**.
+
+3. **Resetting** the current branch to the same commit as the branch you are rebasing onto.
+
+4. Applying each of the saved changes in turn.
+
+![[rebasing-1.png]](rebasing-1.png)
+
+The primary benefit of this process is a **cleaner history**. If you examine the log of a rebased branch, it appears as a **linear history**, looking as though all work happened in a straight line even if it was originally developed in parallel. This is often used to ensure your commits apply cleanly to a remote branch before submitting them to a project you do not maintain, allowing the maintainer to perform a simple **fast-forward merge**.
+
+• **Standard Rebase:** To rebase an "experiment" branch onto "master" | `git switch experiment && git rebase main`
+
+• **Fast-Forwarding After Rebase:** Once the rebase is complete, you must move the master pointer forward:
+
+```
+- Ultra-short memory trick:
+  - The branch **you are on** gets rewritten | `git checkout feature && git rebase main`
+  - Do not rewrite branches that other people depend on
+```
+
+**Advanced Rebasing Options**
+
+Git allows for more complex "transitive" rebases using the **--onto** flag. This is useful when you have a topic branch that was based on another topic branch and you want to move it to a third branch.
+
+• **Rebasing onto a Different Base:** Imagine you have a `client` branch based on a `server` branch. To take the `client` changes and replay them directly onto `master` (skipping the `server` changes):
+
+- Example: `git rebase --onto master server client`.
+
+• **Direct Rebasing:** You can rebase a topic branch onto a base branch **without checking it out first** by specifying both in the command.
+
+- Example: `git rebase master server` (This checks out `server` for you and replays its work onto `master`).
+
+• **Interactive Rebasing:** `git rebase -i` means **interactive rebase**. It lets you _edit, reorder, squash, or drop commits_ instead of rebasing automatically. It is one of Git’s most powerful tools for cleaning up commit history before sharing it.
+
+What interactive rebase is used for
+
+Typical reasons to use:
+
+- combine several small commits into one (squash)    
+- rewrite or fix commit messages
+- delete unwanted commits
+- reorder commits
+- split a commit into multiple commits
+
+It **rewrites history**, so you normally use it **on local branches** that nobody else is using yet.
+
+Basic usage:
+
+You normally specify how far back you want to edit:
+
+```console
+git rebase -i HEAD~3
+```
+
+This means: open the last 3 commits for editing.
+
+You can also rebase to a branch:
+
+```console
+git rebase -i main
+```
+
+This means: rewrite your branch commits on top of `main`, interactively.
+
+Git opens your default editor showing something like:
+
+```console
+pick a1b2c3 First commit
+pick d4e5f6 Second commit
+pick 123abc Third commit
+
+# Commands:
+#  pick  = use commit
+#  reword = use commit, but edit the commit message
+#  edit  = pause to amend the commit
+#  squash = combine with previous commit
+#  fixup  = like squash, but discard commit message
+#  drop   = delete commit
+```
+
+
+**The Golden Rule: The Perils of Rebasing**
+
+Despite its advantages, rebasing has one major drawback: **Do not rebase commits that exist outside your repository and that people may have based work on**.
+
+When you rebase, you are **abandoning existing commits** and creating new ones that are similar but technically different (new SHA-1 hashes). If you push these commits and a collaborator bases work on them, and you then rewrite them via rebase and push again, the collaborator will be forced to re-merge their work. This leads to a "pickle" where the history contains confusing duplicate commits.
+
+If you find yourself in a situation where a partner has force-pushed a rebase over your work, you can mitigate the pain by running **git pull --rebase** instead of a normal pull.
+
+**Rebase vs. Merge**
+
+The choice between the two often comes down to philosophy:
+
+• **Merging** views history as a **historical record** of what actually happened, preserving even the messy merge commits for posterity.
+
+• **Rebasing** views history as the **story** of how the project was made, allowing you to edit and clean up your "first draft" to provide a coherent narrative for future readers.
+
+# 3.7 [Summary](https://git-scm.com/book/en/v2/Git-Branching-Summary)
+
+We’ve covered basic branching and merging in Git. You should feel comfortable creating and switching to new branches, switching between branches and merging local branches together. You should also be able to share your branches by pushing them to a shared server, working with others on shared branches and rebasing your branches before they are shared. Next, we’ll cover what you’ll need to run your own Git repository-hosting server.

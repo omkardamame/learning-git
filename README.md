@@ -68,10 +68,8 @@ Each topic includes **explicit Git commands** to aid future revision.
   (`git branch --no-merged`, `git branch --merged`, `git branch --no-merged main`, `git branch --move`, `git push --set-upstream`)
 - ✅ Branching workflows, fetching, tracking, pruning, deleting
   (`git fetch`, `git checkout`, `git remote add`, `git fetch --prune`, `git push origin --delete`)
-- [ ] Rebasing  
+- ✅ Rebasing  
   (`git rebase`, `git rebase -i`)
-- [ ] Understanding `HEAD`  
-  (`git symbolic-ref HEAD`)
 
 🎯 **Outcome:** Full control over branching and merging.
 
